@@ -1,5 +1,28 @@
 <h1 id="tableLabel">ShortUrl table</h1>
 
+<div>
+  <form (submit)="onAddUrl()">
+    <div class="form-group">
+      <label for="longUrl">Long URL</label>
+      <input
+        type="text"
+        class="form-control"
+        id="longUrl"
+        [(ngModel)]="longUrl"
+        name="longUrl"
+      />
+      <button type="submit" class="btn btn-primary">Convert</button>
+    </div>
+  </form>
+  <span *ngIf="shortUrl" class="ml-3"
+    >{{ shortUrl
+    }}<button (click)="copyToClipboard(shortUrl)" class="btn">
+      [Copy]
+    </button></span
+  >
+  <p *ngIf="errorMessage">{{ errorMessage }}</p>
+</div>
+
 <p *ngIf="!urls?.length"><em>Loading...</em></p>
 
 <table
@@ -11,7 +34,7 @@
     <tr>
       <th>URL</th>
       <th>Short URL</th>
-      <th>Created by</th>
+      <th style="text-align: center">Created by</th>
     </tr>
   </thead>
   <tbody>
@@ -21,9 +44,26 @@
         <a href="{{ getShortUrl(url) }}">{{
           getShortUrl(url).replace("https://", "")
         }}</a>
-        <button>Copy</button>
       </td>
-      <td>{{ url.userName }}</td>
+      <td style="text-align: center">{{ url.userName }}</td>
+      <td style="text-align: right">
+        <div class="btn-group">
+          <button
+            (click)="copyToClipboard(getShortUrl(url))"
+            class="btn btn-primary"
+          >
+            Copy
+          </button>
+          <button
+            (click)="deleteUrl(url.id)"
+            class="btn"
+            style="color: #fff; background-color: #961f1f"
+          >
+            Delete
+          </button>
+          <button class="btn btn-secondary">Details</button>
+        </div>
+      </td>
     </tr>
   </tbody>
 </table>

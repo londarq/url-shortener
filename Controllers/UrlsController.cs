@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Text;
 using url_shortener.Context;
 using url_shortener.Models;
 
@@ -44,25 +43,32 @@ namespace url_shortener.Controllers
 
         // POST: api/Urls
         [HttpPost]
-        public async Task<ActionResult<Url>> PostUrl()
+        //TODO remove
+        [AllowAnonymous]
+        public async Task<ActionResult<Url>> PostUrl([FromBody] LongUrl longUrl)
         {
-            string body;
-            using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
+            //string body;
+            //using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
+            //{
+            //    body = await reader.ReadToEndAsync();
+            //}
+            if (string.IsNullOrEmpty(longUrl.url))
             {
-                body = await reader.ReadToEndAsync();
+                return BadRequest("Request body is empty.");
             }
-            string url = body[1..^1];
 
-            if (!Uri.IsWellFormedUriString(Uri.UnescapeDataString(url), UriKind.Absolute))
+            //string url = body[1..^1];
+
+            if (!Uri.IsWellFormedUriString(Uri.UnescapeDataString(longUrl.url), UriKind.Absolute))
             {
                 return BadRequest("The URL you entered is not valid.");
             }
 
-            var existingUrl = await _context.Urls.FirstOrDefaultAsync(u => u.TargetUrl == url);
+            var existingUrl = await _context.Urls.FirstOrDefaultAsync(u => u.TargetUrl == longUrl.url);
 
             if (existingUrl != null)
             {
-                return CreatedAtAction(nameof(PostUrl), new { id = existingUrl.Id }, existingUrl);
+                return NoContent();
             }
 
             string shortUrl;
@@ -72,7 +78,12 @@ namespace url_shortener.Controllers
                 shortUrl = GenerateShortForm();
             } while (await _context.Urls.AnyAsync(u => u.ShortUrl == shortUrl));
 
-            var newUrl = await _context.Urls.AddAsync(new Url() { ShortUrl = shortUrl, TargetUrl = url, UserName = User.Identity.Name });
+            var newUrl = await _context.Urls.AddAsync(new Url()
+            {
+                ShortUrl = shortUrl,
+                TargetUrl = longUrl.url,
+                UserName = User?.Identity.Name ?? "test"
+            });
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(PostUrl), new { id = newUrl.Entity.Id }, newUrl.Entity);
@@ -80,6 +91,8 @@ namespace url_shortener.Controllers
 
         // DELETE: api/Urls/5
         [HttpDelete("{id}")]
+        // TODO REMOVE
+        [AllowAnonymous]
         public async Task<IActionResult> DeleteUrl(int id)
         {
             var url = await _context.Urls.FindAsync(id);
@@ -89,16 +102,16 @@ namespace url_shortener.Controllers
                 return NotFound();
             }
 
-            if (User.IsInRole("Admin") || url.UserName == User.Identity.Name)
-            {
+            //if (User.IsInRole("Admin") || url.UserName == User.Identity.Name)
+            //{
                 _context.Urls.Remove(url);
                 await _context.SaveChangesAsync();
                 return Ok();
-            }
-            else
-            {
-                return Forbid();
-            }
+            //}
+            //else
+            //{
+            //    return Forbid();
+            //}
         }
 
         static string GenerateShortForm()
