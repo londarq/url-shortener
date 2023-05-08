@@ -1,0 +1,29 @@
+<h1 id="tableLabel">ShortUrl table</h1>
+
+<p *ngIf="!urls?.length"><em>Loading...</em></p>
+
+<table
+  class="table table-striped"
+  aria-labelledby="tableLabel"
+  *ngIf="urls.length"
+>
+  <thead>
+    <tr>
+      <th>URL</th>
+      <th>Short URL</th>
+      <th>Created by</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let url of urls">
+      <td>{{ url.targetUrl.replace("https://", "") }}</td>
+      <td>
+        <a href="{{ getShortUrl(url) }}">{{
+          getShortUrl(url).replace("https://", "")
+        }}</a>
+        <button>Copy</button>
+      </td>
+      <td>{{ url.userName }}</td>
+    </tr>
+  </tbody>
+</table>

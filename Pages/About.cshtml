@@ -1,0 +1,14 @@
+﻿@page
+@model url_shortener.Pages.AboutModel
+
+<h1>About Url Shortener</h1>
+
+<p>@Model.Description</p>
+
+@if (User.IsInRole("Admin"))
+{
+    <form method="post">
+        <textarea asp-for="Description" rows="10"></textarea>
+        <button type="submit">Save</button>
+    </form>
+}
