@@ -46,8 +46,15 @@ namespace url_shortener.Controllers
                 var authClaims = new List<Claim>
                 {
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName)
+                    new Claim("username", user.UserName)
                 };
+
+                var userRoles = await _userManager.GetRolesAsync(user);
+
+                foreach (var userRole in userRoles)
+                {
+                    authClaims.Add(new Claim("role", userRole));
+                }
 
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
 

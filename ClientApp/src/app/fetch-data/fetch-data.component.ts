@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { Url } from '../url';
 
 @Component({
   selector: 'app-fetch-data',
@@ -80,11 +81,4 @@ export class FetchDataComponent {
   copyToClipboard(url: string): void {
     this.clipboard.copy(url);
   }
-}
-
-interface Url {
-  id: number;
-  targetUrl: string;
-  shortUrl: string;
-  userName: string;
 }

@@ -9,7 +9,7 @@ namespace url_shortener.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UrlsController : ControllerBase
     {
         private readonly ApplicationContext _context;
@@ -21,7 +21,7 @@ namespace url_shortener.Controllers
 
         // GET: api/Urls
         [HttpGet]
-        [AllowAnonymous]
+        //[AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Url>>> GetUrls()
         {
             return await _context.Urls.ToListAsync();
@@ -43,8 +43,6 @@ namespace url_shortener.Controllers
 
         // POST: api/Urls
         [HttpPost]
-        //TODO remove
-        [AllowAnonymous]
         public async Task<ActionResult<Url>> PostUrl([FromBody] LongUrl longUrl)
         {
             //string body;
@@ -91,8 +89,6 @@ namespace url_shortener.Controllers
 
         // DELETE: api/Urls/5
         [HttpDelete("{id}")]
-        // TODO REMOVE
-        [AllowAnonymous]
         public async Task<IActionResult> DeleteUrl(int id)
         {
             var url = await _context.Urls.FindAsync(id);
@@ -102,7 +98,7 @@ namespace url_shortener.Controllers
                 return NotFound();
             }
 
-            //if (User.IsInRole("Admin") || url.UserName == User.Identity.Name)
+            //if (User?.IsInRole("Admin") || url.UserName == User?.Identity.Name)
             //{
                 _context.Urls.Remove(url);
                 await _context.SaveChangesAsync();

@@ -10,6 +10,7 @@ import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { LoginComponent } from './login/login.component';
+import { ShortUrlInfoComponent } from './short-url-info/short-url-info.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { LoginComponent } from './login/login.component';
     CounterComponent,
     FetchDataComponent,
     LoginComponent,
+    ShortUrlInfoComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -26,7 +28,7 @@ import { LoginComponent } from './login/login.component';
     FormsModule,
     RouterModule.forRoot([
       { path: '', component: FetchDataComponent, pathMatch: 'full' },
-      //{ path: 'about', component: HomeComponent },
+      { path: 'urls/:id', component: ShortUrlInfoComponent },
       { path: 'login', component: LoginComponent },
     ]),
   ],

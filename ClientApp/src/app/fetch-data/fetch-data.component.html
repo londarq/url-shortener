@@ -61,7 +61,9 @@
           >
             Delete
           </button>
-          <button class="btn btn-secondary">Details</button>
+          <a [routerLink]="['/urls', url.id]" class="btn btn-secondary">
+            Details
+          </a>
         </div>
       </td>
     </tr>
