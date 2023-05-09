@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Url } from '../url';
+import { AuthService } from '../auth/AuthService';
 
 @Component({
   selector: 'app-fetch-data',
@@ -15,16 +16,25 @@ export class FetchDataComponent {
   public longUrl: string = '';
   public errorMessage: string = '';
 
+  isAuthenticated: boolean = false;
+  public isAdmin: boolean = false;
+  public user: string = '';
+
   constructor(
     private http: HttpClient,
     @Inject('BASE_URL') baseUrl: string,
-    private clipboard: Clipboard
+    private clipboard: Clipboard,
+    private authService: AuthService
   ) {
     this.base = baseUrl;
   }
 
   ngOnInit() {
     this.loadUrls();
+
+    this.isAuthenticated = this.authService.isAuthenticated();
+    this.isAdmin = this.authService.getUserRoles().indexOf('Admin') != -1;
+    this.user = this.authService.getUserName();
   }
 
   loadUrls() {

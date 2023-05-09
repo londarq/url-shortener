@@ -1,5 +1,6 @@
-<h1>Login</h1>
-<form (ngSubmit)="onSubmit()">
+<h1 *ngIf="!authService.isAuthenticated()">Login</h1>
+<h1>{{ authService.getUserName() }}</h1>
+<form *ngIf="!authService.isAuthenticated()" (ngSubmit)="onSubmit()">
   <div>
     <label for="username">Username: </label>
     <input type="text" id="username" name="username" [(ngModel)]="username" />
@@ -15,3 +16,11 @@
   </div>
   <button type="submit" class="btn btn-primary">Login</button>
 </form>
+
+<button
+  *ngIf="authService.isAuthenticated()"
+  (click)="authService.logout()"
+  class="btn btn-primary"
+>
+  Logout
+</button>

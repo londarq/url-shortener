@@ -1,6 +1,6 @@
 <h1 id="tableLabel">ShortUrl table</h1>
 
-<div>
+<div *ngIf="isAuthenticated">
   <form (submit)="onAddUrl()">
     <div class="form-group">
       <label for="longUrl">Long URL</label>
@@ -34,7 +34,7 @@
     <tr>
       <th>URL</th>
       <th>Short URL</th>
-      <th style="text-align: center">Created by</th>
+      <th style="text-align: center">Author</th>
     </tr>
   </thead>
   <tbody>
@@ -55,13 +55,18 @@
             Copy
           </button>
           <button
+            *ngIf="user === url.userName || isAdmin"
             (click)="deleteUrl(url.id)"
             class="btn"
             style="color: #fff; background-color: #961f1f"
           >
             Delete
           </button>
-          <a [routerLink]="['/urls', url.id]" class="btn btn-secondary">
+          <a
+            *ngIf="isAuthenticated"
+            [routerLink]="['/urls', url.id]"
+            class="btn btn-secondary"
+          >
             Details
           </a>
         </div>

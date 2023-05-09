@@ -1,4 +1,5 @@
 import { Component, Inject } from '@angular/core';
+import { AuthService } from '../auth/AuthService';
 
 @Component({
   selector: 'app-nav-menu',
@@ -9,7 +10,10 @@ export class NavMenuComponent {
   isExpanded = false;
   public base: string = '';
 
-  constructor(@Inject('BASE_URL') baseUrl: string) {
+  constructor(
+    @Inject('BASE_URL') baseUrl: string,
+    public authService: AuthService
+  ) {
     this.base = baseUrl;
   }
 

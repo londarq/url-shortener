@@ -9,7 +9,7 @@ namespace url_shortener.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UrlsController : ControllerBase
     {
         private readonly ApplicationContext _context;
@@ -21,7 +21,7 @@ namespace url_shortener.Controllers
 
         // GET: api/Urls
         [HttpGet]
-        //[AllowAnonymous]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Url>>> GetUrls()
         {
             return await _context.Urls.ToListAsync();
@@ -45,17 +45,10 @@ namespace url_shortener.Controllers
         [HttpPost]
         public async Task<ActionResult<Url>> PostUrl([FromBody] LongUrl longUrl)
         {
-            //string body;
-            //using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
-            //{
-            //    body = await reader.ReadToEndAsync();
-            //}
             if (string.IsNullOrEmpty(longUrl.url))
             {
                 return BadRequest("Request body is empty.");
             }
-
-            //string url = body[1..^1];
 
             if (!Uri.IsWellFormedUriString(Uri.UnescapeDataString(longUrl.url), UriKind.Absolute))
             {
@@ -98,16 +91,16 @@ namespace url_shortener.Controllers
                 return NotFound();
             }
 
-            //if (User?.IsInRole("Admin") || url.UserName == User?.Identity.Name)
-            //{
+            if (User.IsInRole("Admin") || url.UserName == User.Identity.Name)
+            {
                 _context.Urls.Remove(url);
                 await _context.SaveChangesAsync();
                 return Ok();
-            //}
-            //else
-            //{
-            //    return Forbid();
-            //}
+            }
+            else
+            {
+                return Forbid();
+            }
         }
 
         static string GenerateShortForm()

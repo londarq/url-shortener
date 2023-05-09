@@ -18,7 +18,6 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services.AddAuthentication()
-        .AddCookie()
         .AddJwtBearer(cfg =>
         {
             cfg.TokenValidationParameters = new TokenValidationParameters()
@@ -39,14 +38,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddRazorPages();/*options =>*/
-//{
-//    options.Conventions.AuthorizePage("/About", "Admin");
-//})
-//.AddRazorPagesOptions(options =>
-//{
-//    options.RootDirectory = "/Pages";
-//});
+builder.Services.AddRazorPages();
 
 builder.Services.AddDbContext<ApplicationContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

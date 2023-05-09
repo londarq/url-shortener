@@ -1,5 +1,5 @@
 <h2>Short URL Info</h2>
-<div *ngIf="url">
+<div *ngIf="url && isAuthenticated">
   <p>ID: {{ url.id }}</p>
   <p>Target URL: {{ url.targetUrl }}</p>
   <p>Short URL: {{ url.shortUrl }}</p>
