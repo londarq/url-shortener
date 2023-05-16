@@ -2,6 +2,7 @@
 .NET Core 7 + Angular 15 app with authentication by JWT
 
 Capabilities:
+  - API can be used separately of SPA
   - Unauthorized visitor can view home page with urls table and copy shortened urls, view about page and login
 
 `home`
@@ -25,6 +26,13 @@ Capabilities:
 `about (Razor page from backend)`
 ![image](https://github.com/londarq/url-shortener/assets/80911856/51bcf781-a1ae-4b7d-9191-c7e92aedc849)
   - Currently no sign up, two hardcoded users: `admin` `Admin@123`, `user` `User@123`. Feel free to login and try different roles
+
+Plans for future:
+  - Add swagger for api
+  - Move to 3-layer architecture
+  - Modify url shortening algorithm
+  - Add search
+  - Add pages
 
 Notes:
   - If you get `[webpack-dev-server] Error occurred while proxying request localhost` on start, just refresh the page. There is some delay in proxy i haven't figured out by now
